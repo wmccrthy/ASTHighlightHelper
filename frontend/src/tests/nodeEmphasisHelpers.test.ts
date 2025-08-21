@@ -1,4 +1,4 @@
-import { shouldAutoCollapse, autoCollapseTypes } from "../nodeEmphasisHelpers";
+import { shouldAutoCollapse, autoCollapseTypes } from "../utils/nodeEmphasisHelpers";
 import { astTypeDefinitions } from "../utils/astTypeDefinitions";
 
 describe("shouldAutoCollapse", () => {

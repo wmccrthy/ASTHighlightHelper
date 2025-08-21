@@ -88,7 +88,7 @@ export class ASTParserAndPrinter {
         const astPrinterPath = path.join(
           this.extensionPath,
           "lua_helpers",
-          "ast_json_to_code.luau"
+          "astJsonToCode.luau"
         );
 
         // Run the parser script with temp file path as argument
@@ -173,7 +173,7 @@ export class ASTParserAndPrinter {
         const astParserPath = path.join(
           this.extensionPath,
           "lua_helpers",
-          "ast_to_json.luau"
+          "astToJson.luau"
         );
 
         // Run the parser script with temp file path as argument

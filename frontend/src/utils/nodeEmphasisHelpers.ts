@@ -1,5 +1,5 @@
-import { ASTTypeDefinition } from "./utils/astTypeDefinitions";
-import { unpackArrayType } from "./utils/astTypeHelpers";
+import { ASTTypeDefinition } from "./astTypeDefinitions";
+import { unpackArrayType } from "./astTypeHelpers";
 
 export const autoCollapseTypes = [
   "Token",

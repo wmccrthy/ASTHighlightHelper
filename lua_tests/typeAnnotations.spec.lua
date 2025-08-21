@@ -1,4 +1,4 @@
-local type_annotations = require("../lua_helpers/type_annotations")
+local type_annotations = require("../lua_helpers/typeAnnotations")
 local parser = require("@std/syntax/parser")
 local visitor = require("@std/syntax/visitor")
 local annotateWithType = type_annotations.annotateWithType

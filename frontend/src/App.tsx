@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { isSearchable } from "./helpers";
+import { isSearchable } from "./utils/helpers";
 import "./App.css";
 import {
   handleParseResult,
   handleParseDiffResult,
-} from "./parsingMessageHandlers";
+} from "./utils/parsingMessageHandlers";
 import {
   ASTNode,
   ParseResultMessage,
@@ -13,9 +13,9 @@ import {
   WindowMode,
   DiffASTNode,
   PrintCodeResultMessage,
-} from "./typesAndInterfaces";
-import LiveEditor from "./LiveEditor";
-import DiffAnalyzer from "./DiffAnalyzer";
+} from "./types/typesAndInterfaces";
+import LiveEditor from "./components/LiveEditor";
+import DiffAnalyzer from "./components/DiffAnalyzer";
 import { useCodeTranslation } from "./hooks/useCodeTranslation";
 import { CodeTranslationContext } from "./context/codeTranslationContext";
 

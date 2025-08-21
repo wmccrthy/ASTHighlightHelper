@@ -1,7 +1,7 @@
-local printer = require("../lua_helpers/temp_vendor/lute_printer")
+local printer = require("../lua_helpers/temp_vendor/lutePrinter")
 local parser = require("@std/syntax/parser")
-local helpers = require("./helpers/ast_json_to_code_helpers")
-local getSortedChildren = require("../lua_helpers/sort_by_position_table")
+local helpers = require("./helpers/astJsonToCodeHelpers")
+local getSortedChildren = require("../lua_helpers/sortByPositionTable")
 local printLocalCases = helpers.testCases.printLocalCases
 local createMockToken, createMockPunctuatedArray = helpers.createMockToken, helpers.createMockPunctuatedArray
 

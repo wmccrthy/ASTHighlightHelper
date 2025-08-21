@@ -2,7 +2,7 @@
 local fs = require("@lute/fs")
 local parser = require("@std/syntax/parser")
 local json = require("./json")
-local annotateWithType = require("./type_annotations").annotateWithType
+local annotateWithType = require("./typeAnnotations").annotateWithType
 
 -- Get the source file path from command line argument
 local args = { ... }

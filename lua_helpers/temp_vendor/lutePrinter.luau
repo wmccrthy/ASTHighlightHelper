@@ -1,7 +1,7 @@
 --!strict
 local luau = require("@lute/luau")
 local visitor = require("@std/syntax/visitor")
-local getSortedChildren = require("../sort_by_position_table")
+local getSortedChildren = require("../sortByPositionTable")
 
 local function exhaustiveMatch(value: never): never
 	error(`Unknown value in exhaustive match: {value}`)

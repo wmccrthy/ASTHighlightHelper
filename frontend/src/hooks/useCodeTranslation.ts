@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { VSCodeAPI, PrintCodeMessage } from "../typesAndInterfaces";
+import { VSCodeAPI, PrintCodeMessage } from "../types/typesAndInterfaces";
 
 export const useCodeTranslation = (vscodeApi: VSCodeAPI | null) => {
   const [codeTooltips, setCodeTooltips] = useState<Record<string, string>>({});

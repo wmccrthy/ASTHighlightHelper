@@ -1,7 +1,7 @@
 import CodeEditor from "./CodeEditor";
-import FilterDropdown from "./components/filterDropdown";
-import { parseDiff } from "./parsingMessageHandlers";
-import { ASTNode, VSCodeAPI } from "./typesAndInterfaces";
+import FilterDropdown from "./filterDropdown";
+import { parseDiff } from "../utils/parsingMessageHandlers";
+import { ASTNode, VSCodeAPI } from "../types/typesAndInterfaces";
 import TreeNodeContainer from "./TreeNode";
 
 interface DiffAnalyzerProps {

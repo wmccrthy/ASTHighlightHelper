@@ -1,5 +1,5 @@
 import { diff } from "json-diff-ts";
-import { ASTNode, DiffASTNode, JsonDiffChange } from "./typesAndInterfaces";
+import { ASTNode, DiffASTNode, JsonDiffChange } from "../types/typesAndInterfaces";
 
 export function annotateDiffTree(
   beforeAST: ASTNode,

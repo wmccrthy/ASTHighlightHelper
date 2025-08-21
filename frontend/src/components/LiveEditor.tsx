@@ -1,7 +1,7 @@
 import CodeEditor from "./CodeEditor";
-import FilterDropdown from "./components/filterDropdown";
-import { parseAST } from "./parsingMessageHandlers";
-import { VSCodeAPI, ASTNode } from "./typesAndInterfaces";
+import FilterDropdown from "./filterDropdown";
+import { parseAST } from "../utils/parsingMessageHandlers";
+import { VSCodeAPI, ASTNode } from "../types/typesAndInterfaces";
 import TreeNodeContainer from "./TreeNode";
 
 interface LiverEditorProps {

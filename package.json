@@ -79,7 +79,7 @@
     "package": "vsce package",
     "test:compile": "cd frontend && npm test && npm run compile",
     "test": "cd frontend && npm test",
-    "process-changelog": "npx ts-node ci_scripts/read_changelog.ts"
+    "process-changelog": "npx ts-node ci_scripts/readChangelog.ts"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

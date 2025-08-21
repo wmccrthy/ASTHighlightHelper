@@ -6,7 +6,7 @@ import {
   VSCodeAPI,
   ParseDiffResultMessage,
   DiffASTNode,
-} from "./typesAndInterfaces";
+} from "../types/typesAndInterfaces";
 import { diff as jsonDiff } from "json-diff-ts";
 import { annotateDiffTree } from "./diffUtils";
 

@@ -2,7 +2,7 @@ local fs = require("@lute/fs")
 local json = require("../lua_helpers/json")
 local parser = require("@std/syntax/parser")
 local process = require("@lute/process")
-local helpers = require("./helpers/ast_json_to_code_helpers")
+local helpers = require("./helpers/astJsonToCodeHelpers")
 local e2eCases = helpers.testCases.e2eCases
 
 function trim(s)
@@ -18,7 +18,7 @@ local function ast_json_to_code_test()
 		local ast = parser.parse(fs.readfiletostring(tmpFilePath))
 		local astJson = json.encode(ast)
 		fs.writestringtofile(tmpFilePath, astJson)
-		local cmd = process.run({ "lute", `lua_helpers/ast_json_to_code.luau`, tmpFilePath })
+		local cmd = process.run({ "lute", `lua_helpers/astJsonToCode.luau`, tmpFilePath })
 		local formattedResult = trim(cmd.stdout)
 		process.run({ "rm", tmpFilePath })
 		assert(

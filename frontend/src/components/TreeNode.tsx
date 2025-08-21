@@ -1,16 +1,16 @@
 import React from "react";
-import { TypeAnnotation } from "./components/TypeAnnotation";
-import { shouldAutoCollapse } from "./nodeEmphasisHelpers";
+import { TypeAnnotation } from "./TypeAnnotation";
+import { shouldAutoCollapse } from "../utils/nodeEmphasisHelpers";
 import { JSX } from "react/jsx-runtime";
 import {
   getTypeString,
   getType,
   unpackArrayType,
-} from "./utils/astTypeHelpers";
-import { CodeTooltip } from "./components/CodeTooltip";
+} from "../utils/astTypeHelpers";
+import { CodeTooltip } from "./CodeTooltip";
 
-import { ASTTypeDefinition } from "./utils/astTypeDefinitions";
-import { useCodeTranslationContext } from "./context/codeTranslationContext";
+import { ASTTypeDefinition } from "../utils/astTypeDefinitions";
+import { useCodeTranslationContext } from "../context/codeTranslationContext";
 
 interface TreeNodeProps {
   nodeKey: string;
