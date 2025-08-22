@@ -46,7 +46,6 @@ local function printFallback(node: any): string
 	else
 		local sortedChildren = getSortedChildren(node)
 		for key, child in sortedChildren do
-			-- print("printing child", key, child)
 			nodeSrcStr ..= printASTNode(child) or ""
 		end
 	end
@@ -217,7 +216,30 @@ function printType(node: luau.AstType): string
 	return buffer.readstring(printer.result, 0, printer.cursor)
 end
 
+function filterNodeForPrinting(node: any)
+	local filtered = {}
+	if typeof(node) == "table" then
+		for k, v in node do
+			if
+				(type(v) == "table" and v.diffStatus == "removed")
+				or k == "childChanges"
+				or k == "beforeValue"
+				or k == "afterValue"
+			then
+				continue
+			end
+			if typeof(v) == "table" then
+				v = filterNodeForPrinting(v)
+			end
+			filtered[k] = v
+		end
+	end
+	return filtered
+end
+
 function printASTNode(astNode: any): string | nil
+	-- filter invalid nodes that are lefover from diff annotations
+	astNode = filterNodeForPrinting(astNode)
 	local code, success
 	success, code = pcall(function()
 		return printStatement(astNode)

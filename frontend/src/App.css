@@ -188,7 +188,6 @@
   background-color: rgba(248, 81, 73, 0.2);
   border-left: 3px solid #dc3545;
   padding-left: 4px;
-  text-decoration: line-through;
 }
 
 .diff-updated {
@@ -197,10 +196,11 @@
   padding-left: 4px;
 }
 
+/* Styling for parent nodes that contain changes */
 .diff-contains-changes {
-  border-left: 2px solid #3490dc;
-  padding-left: 2px;
-  /* Subtle styling for parent nodes that contain changes */
+  border-left: 3px solid #3490dc;
+  padding-left: 4px;
+  background-color: rgba(52, 144, 220, 0.05);
 }
 
 .diff-indicator {
@@ -238,15 +238,6 @@
   color: var(--vscode-gitDecoration-addedResourceForeground);
   font-weight: bold;
 }
-
-/* Styling for parent nodes that contain changes */
-.diff-contains-changes {
-  border-left: 2px solid #3490dc;
-  padding-left: 2px;
-  background-color: rgba(52, 144, 220, 0.05);
-}
-
- 
 
 .stats {
   font-size: 11px;

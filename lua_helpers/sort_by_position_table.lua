@@ -7,8 +7,10 @@ local function getNodePosition(node)
 		return node.location.begin.line, node.location.begin.column
 	end
 
-	if typeof(node) ~= "table" then return nil, nil end
-	
+	if typeof(node) ~= "table" then
+		return nil, nil
+	end
+
 	-- Recursive search for position in children
 	local minLine, minCol
 	for _, child in node do
@@ -34,11 +36,9 @@ local function getSortedChildren(node: any)
 	local sorted = {}
 	for key, child in node do
 		-- Filter out diff metadata and nodes without position
-		if key ~= "beforeValue" and key ~= "afterValue" then
-			local line, col = getNodePosition(child)
-			if line and col then
-				table.insert(sorted, child)
-			end
+		local line, col = getNodePosition(child)
+		if line and col then
+			table.insert(sorted, child)
 		end
 	end
 	table.sort(sorted, sortByPosition)

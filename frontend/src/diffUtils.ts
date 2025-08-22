@@ -72,6 +72,60 @@ function buildChangeMap(
 }
 
 /**
+ * Get direct child changes given a nodePath and changeMap
+ * Returns filtered changeMap only containing changes in children of node at nodePath
+ */
+function getDirectChildChanges(
+  nodePath: string,
+  changeMap: Map<string, JsonDiffChange>
+): [string[], boolean] {
+  let anyDescendantChanges = false;
+  return [
+    Array.from(changeMap.keys()).filter((path) => {
+      const pathPrefix = nodePath ? `${nodePath}.` : "";
+      if (!path.startsWith(pathPrefix)) return false;
+      const remainingPath = path.substring(nodePath.length + 1);
+      const isDirectChild = !remainingPath.includes("."); // No further dots = direct child
+      anyDescendantChanges = anyDescendantChanges || !isDirectChild;
+      return isDirectChild;
+    }),
+    anyDescendantChanges,
+  ];
+}
+
+/**
+ * Set childChanges property given a node and array of changed children keys
+ * (WIP) injects removed nodes on the fly
+ */
+function setChildChanges(
+  node: DiffASTNode,
+  nodePath: string,
+  directChildChanges: string[],
+  changeMap: Map<string, JsonDiffChange>
+): void {
+  (node as any).childChanges = directChildChanges.reduce((acc, changePath) => {
+    const change = changeMap.get(changePath);
+    const childKey = changePath.substring(nodePath.length + 1);
+    if (change?.type == "REMOVE") {
+      console.log("Injecting removal:", change);
+      // inject removed child to node
+      node[childKey] = change.value;
+    }
+
+    // Only store if this is actually a direct child (no further nesting)
+    if (!childKey.includes(".")) {
+      // Store with full path to avoid false matches
+      acc[childKey] = {
+        ...change,
+        fullPath: changePath,
+      };
+    }
+
+    return acc;
+  }, {} as any);
+}
+
+/**
  * Recursively walks the tree and annotates nodes based on detected changes
  */
 function annotateDiffTreeRecursive(
@@ -89,15 +143,10 @@ function annotateDiffTreeRecursive(
     const directChange = changeMap.get(currentPath);
 
     // Find immediate child and descendant changes
-    let anyDescendantChanges = false;
-    const directChildChanges = Array.from(changeMap.keys()).filter((path) => {
-      const pathPrefix = currentPath ? `${currentPath}.` : "";
-      if (!path.startsWith(pathPrefix)) return false;
-      const remainingPath = path.substring(currentPath.length + 1);
-      const isDirectChild = !remainingPath.includes("."); // No further dots = direct child
-      anyDescendantChanges = anyDescendantChanges || !isDirectChild;
-      return isDirectChild;
-    });
+    const [directChildChanges, anyDescendantChanges] = getDirectChildChanges(
+      currentPath,
+      changeMap
+    );
 
     if (directChange) {
       // This node itself has changed - annotate it if possible
@@ -129,21 +178,7 @@ function annotateDiffTreeRecursive(
       node.diffStatus = "contains-changes";
 
       // Store change information for child rendering with full path context
-      node.childChanges = directChildChanges.reduce((acc, changePath) => {
-        const change = changeMap.get(changePath);
-        const childKey = changePath.substring(currentPath.length + 1);
-
-        // Only store if this is actually a direct child (no further nesting)
-        if (!childKey.includes(".")) {
-          // Store with full path to avoid false matches
-          acc[childKey] = {
-            ...change,
-            fullPath: changePath,
-          };
-        }
-
-        return acc;
-      }, {} as any);
+      setChildChanges(node, currentPath, directChildChanges, changeMap);
     } else if (anyDescendantChanges) {
       node.diffStatus = "contains-nested-changes";
     } else if (!directChange) {
@@ -167,6 +202,8 @@ function annotateDiffTreeRecursive(
       const childPath = currentPath ? `${currentPath}.${key}` : key;
       const beforeChildNode = beforeNode?.[key];
       if (Array.isArray(node[key])) {
+        const arrayPath = currentPath ? `${currentPath}.${key}` : `${key}`;
+
         const arrayDirectChange = changeMap.get(childPath);
         if (arrayDirectChange) {
           (node[key] as any).diffStatus =
@@ -176,25 +213,37 @@ function annotateDiffTreeRecursive(
               ? "removed"
               : "updated";
         } else {
-          const arrayDescendantChanges = Array.from(changeMap.keys()).filter(
-            (path) => {
-              return path.startsWith(childPath + ".");
-            }
-          ).length;
-          (node[key] as any).diffStatus =
-            arrayDescendantChanges > 0
-              ? "contains-nested-changes"
-              : "unchanged";
+          const [arrayDirectChildChanges, arrayDescendantChanges] =
+            getDirectChildChanges(arrayPath, changeMap);
 
-          // if node[key] is array, we don't call annotate on the array itself, so make sure we assign nested-add appropriately
-          if (node.diffStatus === "added" || hasAdd) {
-            (node[key] as any).diffStatus = "nested-add";
+          if (arrayDirectChildChanges.length > 0) {
+            // This is a parent with child changes
+            // Highlight the direct parent of changed nodes
+            (node[key] as any).diffStatus = "contains-changes";
+
+            // Store change information for child rendering with full path context
+            setChildChanges(
+              node[key],
+              arrayPath,
+              arrayDirectChildChanges,
+              changeMap
+            );
+          } else {
+            // if node[key] is array, we don't call annotate on the array itself, so make sure we assign nested-add appropriately
+            if (node.diffStatus === "added" || hasAdd) {
+              (node[key] as any).diffStatus = "nested-add";
+            } else {
+              (node[key] as any).diffStatus = arrayDescendantChanges
+                ? "contains-nested-changes"
+                : "unchanged";
+            }
           }
         }
 
         // Handle arrays - use dot notation to match json-diff-ts format
         node[key].forEach((item: any, index: number) => {
           if (item && typeof item === "object") {
+            // console.log("Handling array item:", item, index);
             const arrayPath = `${childPath}.${index}`;
             annotateDiffTreeRecursive(
               item,
